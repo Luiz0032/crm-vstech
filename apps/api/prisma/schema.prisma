@@ -1,0 +1,14 @@
+// Prisma ORM 7: as URLs de conexão não ficam mais aqui.
+// O CLI (migrate, db pull) lê a conexão do prisma.config.ts (DIRECT_URL);
+// o Prisma Client recebe a DATABASE_URL pelo adapter @prisma/adapter-pg.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Os models ficam por conta do Luiz.

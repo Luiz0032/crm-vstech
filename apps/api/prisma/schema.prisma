@@ -11,4 +11,47 @@ datasource db {
   provider = "postgresql"
 }
 
-// Os models ficam por conta do Luiz.
+enum Role {
+  admin
+  demo
+
+  @@map("role")
+}
+
+enum LeadStatus {
+  novo
+  em_contato
+  proposta_enviada
+  fechado
+  perdido
+
+  @@map("lead_status")
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String   @map("password_hash") // coluna snake_case no banco
+  role         Role     @default(demo) // usa o enum
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at") // atualiza sozinho
+
+  @@map("users") // nome da tabela
+}
+
+model Lead {
+  id        String     @id @default(uuid()) @db.Uuid
+  name      String
+  email     String
+  phone     String?
+  company   String?
+  message   String?
+  source    String?
+  status    LeadStatus @default(novo)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@index([status, createdAt])
+  @@index([createdAt])
+  @@map("leads")
+}
